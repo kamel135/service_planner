@@ -1,41 +1,24 @@
-### Service Planner
+# Service Planner
 
-Service planner for managing projects and tasks
+🎯 A simple ERPNext module to manage service-based projects with auto-generated tasks.
 
-### Installation
+## Features
 
-You can install this app using the [bench](https://github.com/frappe/bench) CLI:
+- Create Service Projects with scheduling
+- Auto-generate tasks based on role and time
+- Role-based permissions and filters
+- Color-coded tasks and inline actions
+
+## Tech Stack
+
+- 🔧 ERPNext + Frappe Framework
+- 📦 Custom App
+- 📁 Fixtures-based setup
+- ✏️ Client Scripts + Server Scripts
+
+## Installation
 
 ```bash
-cd $PATH_TO_YOUR_BENCH
-bench get-app $URL_OF_THIS_REPO --branch develop
-bench install-app service_planner
-```
-
-### Contributing
-
-This app uses `pre-commit` for code formatting and linting. Please [install pre-commit](https://pre-commit.com/#installation) and enable it for this repository:
-
-```bash
-cd apps/service_planner
-pre-commit install
-```
-
-Pre-commit is configured to use the following tools for checking and formatting your code:
-
-- ruff
-- eslint
-- prettier
-- pyupgrade
-
-### CI
-
-This app can use GitHub Actions for CI. The following workflows are configured:
-
-- CI: Installs this app and runs unit tests on every push to `develop` branch.
-- Linters: Runs [Frappe Semgrep Rules](https://github.com/frappe/semgrep-rules) and [pip-audit](https://pypi.org/project/pip-audit/) on every pull request.
-
-
-### License
-
-mit
+# inside your bench instance
+bench get-app service_planner https://github.com/kamel135/service_planner.git
+bench --site [your-site] install-app service_planner
