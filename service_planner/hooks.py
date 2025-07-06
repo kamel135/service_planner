@@ -9,49 +9,20 @@ app_license = "mit"
 # ------------------
 
 #####################
-
-
-app_include_js = "/assets/service_planner/js/service_project.js"
-
-
-permission_query_conditions = {
-    "Service Task": "service_planner.service_planner.doctype.service_task.service_task.get_permission_query_conditions"
-}
-
-has_permission = {
-    "Service Task": "service_planner.service_planner.doctype.service_task.service_task.has_permission"
-}
-
-
-
-fixtures = [
-    {"dt": "Role", "filters": [["name", "in", [
-        "Engineer", "Analyst", "Projects Manager", "Projects User", "Account Manager"
-    ]]]},
-    {"dt": "Workflow"},
-    {"dt": "Permission Query Script", "filters": [["reference_doctype", "in", [
-        "Service Project", "Service Task"
-    ]]]}
+# Include JS files (Form + List + Custom Pages)
+app_include_js = [
+    "/assets/service_planner/js/service_project_form.js",        # فلترة المهام في الفورم
+    "/assets/service_planner/js/service_project_list.js",        # زر "مهامي" في القائمة
+    "/assets/service_planner/js/service_task.js",                # سكربت خاص بالمهام
+    "/assets/service_planner/js/my_tasks.js",                    # صفحة ويب لعرض مهام المستخدم
 ]
 
+# List View Scripts
+doctype_list_js = {
+    "Service Project": "public/js/service_project_list.js"
+}
 
-fixtures = [
-    {
-        "dt": "Role",
-        "filters": [["name", "in", [
-            "Engineer", "Analyst", "Projects Manager", "Projects User", "Account Manager"
-        ]]]
-    },
-    {"dt": "Workflow"}
-]
-
-
-
-fixtures = ["Custom Field", "Server Script"]
-
-
-fixtures = ["Server Script"]
-
+# Server Scripts Hooks
 doc_events = {
     "Service Project": {
         "before_save": "service_planner.server_script.auto_generate_tasks.execute",
@@ -59,28 +30,28 @@ doc_events = {
     }
 }
 
-
+# Permissions based on role
 permission_query_conditions = {
     "Service Project": "service_planner.server_script.permission_query.get_permission_query_conditions",
     "Service Task": "service_planner.server_script.permission_query.task_permission_query_conditions"
 }
 
-app_include_js = [
-    "/assets/service_planner/js/service_task.js"
-]
+has_permission = {
+    "Service Task": "service_planner.service_planner.doctype.service_task.service_task.has_permission"
+}
 
-
-
+# Fixtures (Roles + Workflows + Scripts + Custom Fields)
 fixtures = [
     {"dt": "Role", "filters": [["name", "in", [
         "Engineer", "Analyst", "Projects Manager", "Projects User", "Account Manager"
     ]]]},
     {"dt": "Workflow"},
     {"dt": "Custom Field"},
-    {"dt": "Server Script", "filters": [["name", "=", "Auto Generate Tasks for Service Project"]]}
+    {"dt": "Server Script", "filters": [["name", "=", "Auto Generate Tasks for Service Project"]]},
+    {"dt": "Permission Query Script", "filters": [["reference_doctype", "in", [
+        "Service Project", "Service Task"
+    ]]]}
 ]
-
-
 
 
 
