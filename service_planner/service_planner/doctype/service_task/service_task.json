@@ -1,0 +1,133 @@
+{
+  "doctype": "DocType",
+  "name": "Service Task",
+  "module": "Service Planner",
+  "istable": 1,
+  "custom": 1,
+  "editable_grid": 1,
+  "track_changes": 1,
+  "fields": [
+    {
+      "fieldname": "parent",
+      "fieldtype": "Link",
+      "options": "Service Project",
+      "reqd": 1,
+      "hidden": 1,
+      "description": "Parent document linking this task to a Service Project"
+    },
+    {
+      "fieldname": "parenttype",
+      "fieldtype": "Data",
+      "reqd": 1,
+      "hidden": 1
+    },
+    {
+      "fieldname": "parentfield",
+      "fieldtype": "Data",
+      "reqd": 1,
+      "hidden": 1
+    },
+    {
+      "fieldname": "task_title",
+      "label": "Task Title",
+      "fieldtype": "Data",
+      "reqd": 1,
+      "in_list_view": 1,
+      "description": "Short descriptive title for the task"
+    },
+     {
+      "fieldname": "due_date",
+      "label": "Due Date/Time",
+      "fieldtype": "Datetime",
+      "reqd": 1,
+      "in_list_view": 1,
+      "description": "Deadline for completing this task"
+   },
+    {
+      "fieldname": "assigned_role",
+      "label": "Assigned Role",
+      "fieldtype": "Select",
+      "options": "Engineer\nAnalyst\nAccount Manager",
+      "reqd": 1,
+      "in_list_view": 1,
+      "description": "Role responsible for this task"
+    },
+    {
+      "fieldname": "assigned_to",
+      "label": "Assigned To",
+      "fieldtype": "Link",
+      "options": "User",
+      "description": "User assigned to this task"
+    },
+    {
+      "fieldname": "assigned_to",
+      "label": "Assigned To",
+      "fieldtype": "Link",
+      "options": "User",
+      "description": "Specific user assigned to carry out this task"
+    },
+    {
+      "fieldname": "status",
+      "label": "Status",
+      "fieldtype": "Select",
+      "options": "Pending\nIn Progress\nCompleted\nCancelled",
+      "default": "Pending",
+      "reqd": 1,
+      "in_list_view": 1,
+      "description": "Current status of the task"
+    },
+    {
+      "fieldname": "notes",
+      "label": "Notes",
+      "fieldtype": "Text Editor",
+      "description": "Additional details or comments about the task"
+    },
+    {
+      "fieldname": "completion_notes",
+      "label": "Completion Notes",
+      "fieldtype": "Small Text",
+      "depends_on": "eval:doc.status == 'Completed'",
+      "description": "Notes recorded upon task completion"
+    },
+     
+    {
+      "fieldname": "organization",
+      "label": "Organization",
+      "fieldtype": "Link",
+      "options": "Company",
+      "insert_after": "assigned_role",
+      "hidden": 1
+     }
+
+
+  ],
+  "permissions": [
+    {
+      "role": "System Manager",
+      "read": 1,
+      "write": 1,
+      "create": 1,
+      "delete": 1,
+      "submit": 1,
+      "cancel": 1
+    },
+    {
+      "role": "Projects Manager",
+      "read": 1,
+      "write": 1,
+      "create": 1,
+      "delete": 0,
+      "submit": 1,
+      "cancel": 0
+    },
+    {
+      "role": "Projects User",
+      "read": 1,
+      "write": 1,
+      "create": 1,
+      "delete": 0,
+      "submit": 0,
+      "cancel": 0
+    }
+  ]
+}

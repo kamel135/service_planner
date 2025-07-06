@@ -1,0 +1,137 @@
+{
+  "name": "Service Project",
+  "doctype": "DocType",
+  "module": "Service Planner",
+  "custom": 1,
+  "is_submittable": 1,
+  "quick_entry": 1,
+  "track_changes": 1,
+  "autoname": "naming_series:",
+  "naming_series": "SP-.YYYY.-",
+  "field_order": [
+    "naming_series",
+    "project_name",
+    "organization",
+    "start_date",
+    "schedule_type",
+    "interval_days",
+    "default_role",
+    "project_owner",
+    "status",
+    "service_tasks"
+  ],
+  "fields": [
+    {
+      "fieldname": "naming_series",
+      "label": "Naming Series",
+      "fieldtype": "Select",
+      "options": "SP-.YYYY.-",
+      "reqd": 1,
+      "default": "SP-.YYYY.-",
+      "description": "Naming series for the project"
+    },
+    {
+      "fieldname": "project_name",
+      "label": "Project Name",
+      "fieldtype": "Data",
+      "reqd": 1,
+      "description": "Unique name for the service project"
+    },
+    {
+      "fieldname": "organization",
+      "label": "Organization",
+      "fieldtype": "Link",
+      "options": "Company",
+      "reqd": 1,
+      "description": "Select the organization this project belongs to"
+    },
+    {
+      "fieldname": "start_date",
+      "label": "Start Date",
+      "fieldtype": "Date",
+      "reqd": 1,
+      "default": "Today",
+      "description": "Starting date of the service project"
+    },
+    {
+      "fieldname": "schedule_type",
+      "label": "Schedule Type",
+      "fieldtype": "Select",
+      "options": "Daily\nWeekly\nEvery X Days",
+      "reqd": 1,
+      "default": "Daily",
+      "description": "Select how tasks should be scheduled"
+    },
+    {
+      "fieldname": "interval_days",
+      "label": "Interval Days",
+      "fieldtype": "Int",
+      "depends_on": "eval:doc.schedule_type == 'Every X Days'",
+      "reqd": 1,
+      "default": 1,
+      "description": "Number of days between each task when using 'Every X Days'"
+    },
+    {
+      "fieldname": "default_role",
+      "label": "Default Role",
+      "fieldtype": "Select",
+      "options": "Engineer\nAnalyst\nAccount Manager",
+      "default": "Engineer",
+      "description": "Default role for auto-generated tasks"
+    },
+    {
+      "fieldname": "project_owner",
+      "label": "Project Owner",
+      "fieldtype": "Link",
+      "options": "User",
+      "reqd": 1,
+      "description": "User responsible for this project",
+      "depends_on": "eval:frappe.user.has_role('System Manager')"
+    },
+    {
+      "fieldname": "status",
+      "label": "Status",
+      "fieldtype": "Select",
+      "options": "Draft\nActive\nCompleted\nCancelled",
+      "default": "Draft",
+      "reqd": 1,
+      "description": "Current status of the project"
+    },
+    {
+      "fieldname": "service_tasks",
+      "label": "Service Tasks",
+      "fieldtype": "Table",
+      "options": "Service Task",
+      "description": "List of service tasks related to this project"
+    }
+  ],
+  "permissions": [
+    {
+      "role": "System Manager",
+      "read": 1,
+      "write": 1,
+      "create": 1,
+      "delete": 1,
+      "submit": 1,
+      "cancel": 1
+    },
+    {
+      "role": "Projects Manager",
+      "read": 1,
+      "write": 1,
+      "create": 1,
+      "delete": 0,
+      "submit": 1,
+      "cancel": 0
+    },
+    {
+      "role": "Projects User",
+      "read": 1,
+      "write": 1,
+      "create": 1,
+      "delete": 0,
+      "submit": 0,
+      "cancel": 0
+    }
+  ]
+}

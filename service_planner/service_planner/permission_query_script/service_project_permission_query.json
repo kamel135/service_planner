@@ -1,0 +1,8 @@
+{
+  "doctype": "Permission Query Script",
+  "name": "Service Project - Permission Query",
+  "reference_doctype": "Service Project",
+  "module": "Service Planner",
+  "script": "from service_planner.server_script.permission_query import get_permission_query_conditions\n\ndef get_permission_query_conditions(user):\n    return get_permission_query_conditions(user)",
+  "disabled": 0
+}

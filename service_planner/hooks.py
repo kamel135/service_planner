@@ -8,6 +8,88 @@ app_license = "mit"
 # Apps
 # ------------------
 
+#####################
+
+
+app_include_js = "/assets/service_planner/js/service_project.js"
+
+
+permission_query_conditions = {
+    "Service Task": "service_planner.service_planner.doctype.service_task.service_task.get_permission_query_conditions"
+}
+
+has_permission = {
+    "Service Task": "service_planner.service_planner.doctype.service_task.service_task.has_permission"
+}
+
+
+
+fixtures = [
+    {"dt": "Role", "filters": [["name", "in", [
+        "Engineer", "Analyst", "Projects Manager", "Projects User", "Account Manager"
+    ]]]},
+    {"dt": "Workflow"},
+    {"dt": "Permission Query Script", "filters": [["reference_doctype", "in", [
+        "Service Project", "Service Task"
+    ]]]}
+]
+
+
+fixtures = [
+    {
+        "dt": "Role",
+        "filters": [["name", "in", [
+            "Engineer", "Analyst", "Projects Manager", "Projects User", "Account Manager"
+        ]]]
+    },
+    {"dt": "Workflow"}
+]
+
+
+
+fixtures = ["Custom Field", "Server Script"]
+
+
+fixtures = ["Server Script"]
+
+doc_events = {
+    "Service Project": {
+        "before_save": "service_planner.server_script.auto_generate_tasks.execute",
+        "validate": "service_planner.server_script.auto_generate_tasks.validate_schedule_configuration"
+    }
+}
+
+
+permission_query_conditions = {
+    "Service Project": "service_planner.server_script.permission_query.get_permission_query_conditions",
+    "Service Task": "service_planner.server_script.permission_query.task_permission_query_conditions"
+}
+
+app_include_js = [
+    "/assets/service_planner/js/service_task.js"
+]
+
+
+
+fixtures = [
+    {"dt": "Role", "filters": [["name", "in", [
+        "Engineer", "Analyst", "Projects Manager", "Projects User", "Account Manager"
+    ]]]},
+    {"dt": "Workflow"},
+    {"dt": "Custom Field"},
+    {"dt": "Server Script", "filters": [["name", "=", "Auto Generate Tasks for Service Project"]]}
+]
+
+
+
+
+
+##################
+
+
+
+
+
 # required_apps = []
 
 # Each item in the list will be shown as an app in the apps page

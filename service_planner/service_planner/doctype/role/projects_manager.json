@@ -1,0 +1,7 @@
+{
+  "doctype": "Role",
+  "name": "Projects Manager",
+  "role_name": "Projects Manager",
+  "desk_access": 1,
+  "is_custom": 1
+}
