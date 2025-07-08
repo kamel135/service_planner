@@ -1,0 +1,46 @@
+.filters {
+  margin-bottom: 20px;
+  display: flex;
+  gap: 10px;
+  align-items: center;
+}
+
+#tasks-table {
+  width: 100%;
+  border-collapse: collapse;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+}
+
+#tasks-table th,
+#tasks-table td {
+  border: 1px solid #ddd;
+  padding: 12px;
+  text-align: center;
+}
+
+#tasks-table th {
+  background-color: #f5f5f5;
+}
+
+.status-pending {
+  background-color: #fff9c4;
+}
+
+.status-completed {
+  background-color: #c8e6c9;
+  text-decoration: line-through;
+}
+
+button {
+  padding: 6px 12px;
+  background: #2196f3;
+  color: white;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  transition: background 0.3s ease;
+}
+
+button:hover {
+  background: #1976d2;
+}

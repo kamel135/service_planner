@@ -1,5 +1,5 @@
 import frappe
-from frappe.utils import add_days, nowdate
+from frappe.utils import add_days, nowdate, getdate
 
 def execute(doc, method):
     """
@@ -25,7 +25,7 @@ def generate_service_tasks(doc):
     توليد المهام تلقائياً بناءً على نوع الجدولة والدور الافتراضي
     """
     schedule = doc.schedule_type
-    start = doc.start_date or nowdate()
+    start = getdate(doc.start_date) if doc.start_date else getdate(nowdate())
     interval = int(doc.interval_days or 1)
     task_role = doc.default_role or "Engineer"
 
@@ -44,14 +44,13 @@ def generate_service_tasks(doc):
             task_date = add_days(start, i)
 
         if task_date:
-            # المهمة بدون assigned_to (يمكن تعيينه يدويًا لاحقاً)
             doc.append('service_tasks', {
                 'task_title': f'Auto Task for {task_date}',
                 'due_date': task_date,
                 'assigned_role': task_role,
                 'status': 'Pending',
                 'notes': f'Task generated for {schedule} on {task_date}'
-                # 'assigned_to': None   # ممكن تضيف لو حابب صراحة تضعه None
+                # يمكنك لاحقًا تحديد `assigned_to` حسب الدور
             })
 
 
@@ -82,5 +81,5 @@ def validate_schedule_configuration(doc, method):
         if not doc.interval_days or doc.interval_days <= 0:
             frappe.throw("Interval Days must be a positive number when Schedule Type is 'Every X Days'")
 
-    if doc.start_date and doc.start_date < nowdate():
-        frappe.msgprint("Warning: Start date is in the past. Tasks will be generated from the specified date.")
+    if doc.start_date and getdate(doc.start_date) < getdate(nowdate()):
+        frappe.msgprint("⚠️ Warning: Start date is in the past. Tasks will be generated from the specified date.")

@@ -1,0 +1,41 @@
+{% block page_content %}
+<h2>📋 مهامي</h2>
+
+<div class="filters">
+  <select id="status-filter">
+    <option value="All">كل الحالات</option>
+    <option value="Pending">🚧 قيد التنفيذ</option>
+    <option value="Completed">✅ مكتملة</option>
+  </select>
+
+  <select id="due-filter">
+    <option value="all">كل المواعيد</option>
+    <option value="today">📅 اليوم</option>
+    <option value="soon">🕒 قريبًا</option>
+  </select>
+
+  <button onclick="loadTasks()">🔄 تحميل المهام</button>
+</div>
+
+<table id="tasks-table">
+  <thead>
+    <tr>
+      <th>المهمة</th>
+      <th>الاستحقاق</th>
+      <th>الحالة</th>
+      <th>إجراء</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr><td colspan="4">⏳ برجاء التحميل...</td></tr>
+  </tbody>
+</table>
+{% endblock %}
+
+{% block script %}
+<script src="/assets/service_planner/js/my_tasks.js"></script>
+{% endblock %}
+
+{% block style %}
+<link rel="stylesheet" href="/assets/service_planner/css/my_tasks.css">
+{% endblock %}

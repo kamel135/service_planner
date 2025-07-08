@@ -9,41 +9,61 @@ app_license = "mit"
 # ------------------
 
 #####################
+#####################
+
+#after_migrate = [
+#    "service_planner.notification.setup_notifications.run_notification_setup"
+#]
+
 # Include JS files (Form + List + Custom Pages)
 app_include_js = [
-    "/assets/service_planner/js/service_project_form.js",        # فلترة المهام في الفورم
-    "/assets/service_planner/js/service_project_list.js",        # زر "مهامي" في القائمة
-    "/assets/service_planner/js/service_task.js",                # سكربت خاص بالمهام
-    "/assets/service_planner/js/my_tasks.js",                    # صفحة ويب لعرض مهام المستخدم
+    "/assets/service_planner/js/service_project_form.js",   # فلترة المهام في الفورم
+    "/assets/service_planner/js/service_project_list.js",   # زر "مهامي" في القائمة
+    "/assets/service_planner/js/service_task.js",           # سكربت خاص بالمهام
+    "/assets/service_planner/js/my_tasks.js",
+    "/assets/service_planner/css/my_tasks.css",
 ]
 
-# List View Scripts
+# JS for List View
 doctype_list_js = {
     "Service Project": "public/js/service_project_list.js"
 }
 
-# Server Scripts Hooks
+# Server-Side Event Hooks
 doc_events = {
+    "Service Task": {
+        "after_insert": "service_planner.server_script.notify_task_by_role.notify_users_by_assigned_role",
+        "on_update": "service_planner.server_script.notify_task_by_role.notify_users_by_assigned_role"
+    },
     "Service Project": {
         "before_save": "service_planner.server_script.auto_generate_tasks.execute",
         "validate": "service_planner.server_script.auto_generate_tasks.validate_schedule_configuration"
     }
 }
 
-# Permissions based on role
+
+# Scheduler Tasks (Daily Reminder)
+scheduler_events = {
+    "daily": [
+        "service_planner.server_script.task_notifications.notify_scheduled_tasks"
+    ]
+}
+
+# Dynamic Permissions
 permission_query_conditions = {
     "Service Project": "service_planner.server_script.permission_query.get_permission_query_conditions",
     "Service Task": "service_planner.server_script.permission_query.task_permission_query_conditions"
 }
 
 has_permission = {
-    "Service Task": "service_planner.service_planner.doctype.service_task.service_task.has_permission"
+    "Service Task": "service_planner.doctype.service_task.service_task.has_permission"
 }
 
-# Fixtures (Roles + Workflows + Scripts + Custom Fields)
+# Fixtures (for export/import)
 fixtures = [
     {"dt": "Role", "filters": [["name", "in", [
-        "Engineer", "Analyst", "Projects Manager", "Projects User", "Account Manager"
+        "Engineer", "Analyst", "Projects Manager", "Projects User", "Account Manager",
+        # أضف باقي الأدوار اللي عندك حسب حاجتك
     ]]]},
     {"dt": "Workflow"},
     {"dt": "Custom Field"},
@@ -53,6 +73,7 @@ fixtures = [
     ]]]}
 ]
 
+####################
 
 
 ##################

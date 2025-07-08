@@ -32,3 +32,21 @@ def has_permission(doc, ptype, user):
     return (
         doc.assigned_role in user_roles and doc.organization == user_org
     )
+
+
+#def after_insert(doc, method):
+ #   message = f"New Service Task Created: {doc.task_title}"
+
+    # إشعار مباشر للمستخدم في assigned_to
+ #   if doc.assigned_to:
+  #      frappe.publish_realtime(event="task_notification", user=doc.assigned_to, message=message)
+
+    # إشعار لكل الـ Engineers في نفس المنظمة
+  # # users_with_role = frappe.db.sql(#"
+      #  SELECT HR.parent FROM `tabHas Role` HR
+     #   JOIN `tabUser` U ON HR.parent = U.name
+    #    WHERE HR.role = %s AND U.organization = %s
+ #   """, ("Engineer", doc.organization), as_dict=True)
+#
+   # for user in users_with_role:
+    #    frappe.publish_realtime(event="task_notification", user=user.parent, message=message)
