@@ -17,11 +17,11 @@ frappe.ui.form.on('Service Project', {
             return user_roles.includes(task.assigned_role);
         });
 
-        // ✅ تحديث قائمة المهام وإعادة عرضها
+        // ✅ تحديث قائمة المهام
         frm.doc.service_tasks = allowed_tasks;
         frm.refresh_field("service_tasks");
 
-        // 🔒 جعل الحقول غير المسموح بها Read-Only
+        // 🔒 جعل بعض الحقول Read-Only
         const grid = frm.fields_dict.service_tasks.grid;
         if (grid && grid.fields) {
             grid.fields.forEach(df => {
@@ -29,7 +29,6 @@ frappe.ui.form.on('Service Project', {
             });
         }
 
-        // 🔁 تحديث الشبكة
         grid.refresh();
     }
 });

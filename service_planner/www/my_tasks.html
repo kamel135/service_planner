@@ -1,41 +1,62 @@
+{% extends "templates/web.html" %}
+
+{% block title %}مهامي{% endblock %}
+
 {% block page_content %}
-<h2>📋 مهامي</h2>
+<div class="container my-4">
+    <h1 class="mb-4">
+        <i class="fa fa-tasks"></i> مهامي
+        <small class="text-muted" id="task-counter"></small>
+    </h1>
 
-<div class="filters">
-  <select id="status-filter">
-    <option value="All">كل الحالات</option>
-    <option value="Pending">🚧 قيد التنفيذ</option>
-    <option value="Completed">✅ مكتملة</option>
-  </select>
+    <div class="card mb-4">
+        <div class="card-body">
+            <div class="row">
+                <div class="col-md-4 mb-3">
+                    <select id="status-filter" class="form-control">
+                        <option value="All">كل الحالات</option>
+                        <option value="Open">مفتوح</option>
+                        <option value="Pending">قيد الانتظار</option>
+                        <option value="In Progress">قيد التنفيذ</option>
+                        <option value="Completed">مكتمل</option>
+                    </select>
+                </div>
+                <div class="col-md-4 mb-3">
+                    <select id="due-filter" class="form-control">
+                        <option value="all">كل المواعيد</option>
+                        <option value="today">اليوم</option>
+                        <option value="soon">قريباً</option>
+                        <option value="overdue">متأخر</option>
+                    </select>
+                </div>
+            </div>
+        </div>
+    </div>
 
-  <select id="due-filter">
-    <option value="all">كل المواعيد</option>
-    <option value="today">📅 اليوم</option>
-    <option value="soon">🕒 قريبًا</option>
-  </select>
-
-  <button onclick="loadTasks()">🔄 تحميل المهام</button>
+    <div class="table-responsive">
+        <table id="tasks-table" class="table table-bordered">
+            <thead class="thead-light">
+                <tr>
+                    <th>المهمة</th>
+                    <th>الموعد</th>
+                    <th>الحالة</th>
+                    <th>المسند إليه</th>
+                    <th>الدور</th>
+                    <th>إجراءات</th>
+                </tr>
+            </thead>
+            <tbody>
+                <!-- سيتم ملؤها بواسطة JavaScript -->
+            </tbody>
+        </table>
+    </div>
 </div>
-
-<table id="tasks-table">
-  <thead>
-    <tr>
-      <th>المهمة</th>
-      <th>الاستحقاق</th>
-      <th>الحالة</th>
-      <th>إجراء</th>
-    </tr>
-  </thead>
-  <tbody>
-    <tr><td colspan="4">⏳ برجاء التحميل...</td></tr>
-  </tbody>
-</table>
-{% endblock %}
-
-{% block script %}
-<script src="/assets/service_planner/js/my_tasks.js"></script>
 {% endblock %}
 
 {% block style %}
 <link rel="stylesheet" href="/assets/service_planner/css/my_tasks.css">
+{% endblock %}
+
+{% block script %}
+<script src="/assets/service_planner/js/my_tasks.js"></script>
 {% endblock %}

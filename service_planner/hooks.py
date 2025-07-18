@@ -6,10 +6,14 @@ app_email = "kamelelnemr1@gmail.com"
 app_license = "mit"
 
 # Apps
-# ------------------
+#####################
+
 
 #####################
-#####################
+
+
+
+
 
 #after_migrate = [
 #    "service_planner.notification.setup_notifications.run_notification_setup"
@@ -18,10 +22,13 @@ app_license = "mit"
 # Include JS files (Form + List + Custom Pages)
 app_include_js = [
     "/assets/service_planner/js/service_project_form.js",   # فلترة المهام في الفورم
-    "/assets/service_planner/js/service_project_list.js",   # زر "مهامي" في القائمة
     "/assets/service_planner/js/service_task.js",           # سكربت خاص بالمهام
     "/assets/service_planner/js/my_tasks.js",
+    "/assets/service_planner/js/service_task_client.js",
     "/assets/service_planner/css/my_tasks.css",
+    "/assets/service_planner/js/service_project_restrict_edit.js",
+    "/assets/service_planner/js/lock_main_fields.js",
+
 ]
 
 # JS for List View
@@ -76,6 +83,13 @@ fixtures = [
 ####################
 
 
+##################
+
+
+
+####################
+
+##################
 ##################
 
 
