@@ -173,51 +173,6 @@
       "description": "Indicates if this task was automatically generated"
     },
     {
-      "fieldname": "due_date_utc",
-      "label": "Due Date (UTC)",
-      "fieldtype": "Datetime",
-      "hidden": 1
-    },
-    {
-      "fieldname": "user_timezone",
-      "label": "User Timezone",
-      "fieldtype": "Data",
-      "hidden": 1
-    },
-    {
-      "fieldname": "timezone_offset",
-      "label": "Timezone Offset",
-      "fieldtype": "Data",
-      "hidden": 1,
-      "read_only": 1
-    }, 
-    {
-      "fieldname": "dst_enabled",
-      "label": "DST Enabled",
-      "fieldtype": "Check",
-      "default": 0,
-      "description": "Enable Daylight Saving Time adjustments"
-    },
-    {
-      "fieldname": "original_timezone",
-      "label": "Original Timezone",
-      "fieldtype": "Data",
-      "read_only": 1
-    },
-    {
-      "fieldname": "local_due_date",
-      "label": "Local Due Date",
-      "fieldtype": "Datetime",
-      "read_only": 1
-     },
-     {
-      "fieldname": "due_date_display",
-      "label": "Due Date (Local Time)",
-      "fieldtype": "HTML",
-      "read_only": 1,
-      "description": "Task due date in assignee's timezone"
-     },
-     {
       "fieldname": "last_notification_sent",
       "label": "Last Notification",
       "fieldtype": "Datetime",

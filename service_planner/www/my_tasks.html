@@ -1,62 +1,275 @@
+<!-- service_planner/www/my_tasks.html -->
 {% extends "templates/web.html" %}
 
-{% block title %}مهامي{% endblock %}
+{% block title %}{{ _("My Tasks") }}{% endblock %}
 
 {% block page_content %}
 <div class="container my-4">
-    <h1 class="mb-4">
-        <i class="fa fa-tasks"></i> مهامي
-        <small class="text-muted" id="task-counter"></small>
+    <h1 class="mb-4 d-flex align-items-center">
+        <i class="fa fa-tasks me-2"></i> {{ _("My Tasks") }}
+        <small class="text-muted ms-3" id="task-counter"></small>
     </h1>
 
+    <!-- فلاتر -->
     <div class="card mb-4">
         <div class="card-body">
             <div class="row">
                 <div class="col-md-4 mb-3">
+                    <label for="status-filter">{{ _("Task Status") }}</label>
                     <select id="status-filter" class="form-control">
-                        <option value="All">كل الحالات</option>
-                        <option value="Open">مفتوح</option>
-                        <option value="Pending">قيد الانتظار</option>
-                        <option value="In Progress">قيد التنفيذ</option>
-                        <option value="Completed">مكتمل</option>
+                        <option value="All">{{ _("All Statuses") }}</option>
+                        <option value="Open">{{ _("Open") }}</option>
+                        <option value="Pending">{{ _("Pending") }}</option>
+                        <option value="In Progress">{{ _("In Progress") }}</option>
+                        <option value="Completed">{{ _("Completed") }}</option>
                     </select>
                 </div>
                 <div class="col-md-4 mb-3">
+                    <label for="due-filter">{{ _("Due Date") }}</label>
                     <select id="due-filter" class="form-control">
-                        <option value="all">كل المواعيد</option>
-                        <option value="today">اليوم</option>
-                        <option value="soon">قريباً</option>
-                        <option value="overdue">متأخر</option>
+                        <option value="all">{{ _("All Dates") }}</option>
+                        <option value="today">{{ _("Today") }}</option>
+                        <option value="week">{{ _("This Week") }}</option>
+                        <option value="month">{{ _("This Month") }}</option>
+                        <option value="overdue">{{ _("Overdue") }}</option>
                     </select>
+                </div>
+                <div class="col-md-4 mb-3">
+                    <label for="search-input">{{ _("Search Tasks") }}</label>
+                    <input type="text"
+                           id="search-input"
+                           class="form-control"
+                           placeholder="{{ _('Search by title or notes...') }}">
                 </div>
             </div>
         </div>
     </div>
 
+    <!-- تحميل -->
+    <div id="loading-status" style="display: none;"></div>
+
+    <!-- إحصائيات -->
+    <div class="row mb-4" id="stats-container">
+        <div class="col-md-3">
+            <div class="card stat-card total-card">
+                <div class="card-body">
+                    <h5>{{ _("Total Tasks") }}</h5>
+                    <h3 id="total-tasks">0</h3>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-3">
+            <div class="card stat-card completed-card">
+                <div class="card-body">
+                    <h5>{{ _("Completed") }}</h5>
+                    <h3 id="completed-tasks">0</h3>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-3">
+            <div class="card stat-card progress-card">
+                <div class="card-body">
+                    <h5>{{ _("In Progress") }}</h5>
+                    <h3 id="in-progress-tasks">0</h3>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-3">
+            <div class="card stat-card overdue-card">
+                <div class="card-body">
+                    <h5>{{ _("Overdue") }}</h5>
+                    <h3 id="overdue-tasks">0</h3>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- جدول المهام -->
     <div class="table-responsive">
-        <table id="tasks-table" class="table table-bordered">
-            <thead class="thead-light">
+        <table id="tasks-table" class="table table-bordered table-hover">
+            <thead>
                 <tr>
-                    <th>المهمة</th>
-                    <th>الموعد</th>
-                    <th>الحالة</th>
-                    <th>المسند إليه</th>
-                    <th>الدور</th>
-                    <th>إجراءات</th>
+                    <th>{{ _("Task") }}</th>
+                    <th>{{ _("Local Due Date") }}</th>
+                    <th>{{ _("UTC Due Date") }}</th>
+                    <th>{{ _("Status") }}</th>
+                    <th>{{ _("Assigned To") }}</th>
+                    <th>{{ _("Role") }}</th>
+                    <th>{{ _("Actions") }}</th>
                 </tr>
             </thead>
-            <tbody>
-                <!-- سيتم ملؤها بواسطة JavaScript -->
-            </tbody>
+            <tbody><!-- يملأ عبر JS --></tbody>
         </table>
+    </div>
+
+    <div class="text-center mt-5">
+        <small>{{ _("Powered by ERPNext") }}</small>
     </div>
 </div>
 {% endblock %}
 
 {% block style %}
 <link rel="stylesheet" href="/assets/service_planner/css/my_tasks.css">
-{% endblock %}
+<style>
+    body {
+        background-color: #f4f6f9;
+        color: #333;
+    }
 
+    h1 {
+        font-size: 1.75rem;
+        font-weight: 700;
+        color: #2c3e50;
+    }
+
+    #task-counter {
+        font-size: 1rem;
+        font-weight: 400;
+        color: #6c757d;
+    }
+
+    .form-control {
+        border-radius: 6px;
+        border: 1px solid #ced4da;
+        font-size: 0.95rem;
+        padding: 0.5rem 0.75rem;
+        background-color: #fdfdfd;
+    }
+
+    label {
+        font-weight: 600;
+        color: #444;
+        font-size: 0.9rem;
+    }
+
+    .stat-card {
+        border-radius: 10px;
+        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.04);
+        text-align: center;
+        transition: transform 0.2s;
+        border: none;
+        padding: 1rem;
+    }
+
+    .stat-card:hover {
+        transform: translateY(-3px);
+    }
+
+    /* ألوان مخصصة لكل كارت + تصحيح لون النص */
+    .total-card {
+        background-color: #6f42c1;
+        color: #ffffff;
+    }
+
+    .completed-card {
+        background-color: #28a745;
+        color: #ffffff;
+    }
+
+    .progress-card {
+        background-color: #007bff;
+        color: #ffffff;
+    }
+
+    .overdue-card {
+        background-color: #dc3545;
+        color: #ffffff;
+    }
+
+    /* تأكيد أن النص داخل الكروت لونه أبيض */
+    .stat-card h5,
+    .stat-card h3 {
+        color: #ffffff !important;
+    }
+
+    .table {
+        border-collapse: separate;
+        border-spacing: 0;
+        border-radius: 10px;
+        overflow: hidden;
+        background-color: #fff;
+    }
+
+    .table thead th {
+        background-color: #f1f3f5;
+        color: #495057;
+        font-size: 0.9rem;
+        border-bottom: 2px solid #dee2e6;
+    }
+
+    .table td, .table th {
+        padding: 0.75rem;
+        vertical-align: middle;
+    }
+
+    .table-hover tbody tr:hover {
+        background-color: #f8f9fc;
+    }
+
+    .badge {
+        font-size: 0.75rem;
+        padding: 0.35em 0.65em;
+        border-radius: 6px;
+        font-weight: 600;
+        text-transform: uppercase;
+    }
+
+    .badge-primary { background-color: #4a90e2; }
+    .badge-success { background-color: #2ecc71; }
+    .badge-warning { background-color: #f39c12; color: #fff; }
+    .badge-danger  { background-color: #e74c3c; }
+    .badge-info    { background-color: #00bcd4; }
+
+    .btn-group {
+        display: flex;
+        gap: 6px;
+    }
+
+    #loading-status {
+        margin: 1rem 0;
+        padding: 0.75rem;
+        border-radius: 6px;
+        background-color: #eaf4fc;
+        color: #0c5460;
+        font-size: 0.9rem;
+    }
+
+    .spinner-border-sm {
+        width: 1rem;
+        height: 1rem;
+        border-width: 0.15em;
+    }
+
+    .task-notes {
+        margin-top: 10px;
+        padding: 10px;
+        background-color: #f8f9fa;
+        border-radius: 5px;
+    }
+
+    .notes-content {
+        white-space: pre-wrap;
+        word-wrap: break-word;
+    }
+
+    @media (max-width: 768px) {
+        .btn-group {
+            flex-direction: column;
+            gap: 8px;
+        }
+
+        h1 {
+            font-size: 1.5rem;
+            flex-direction: column;
+            align-items: flex-start;
+        }
+
+        .stat-card {
+            margin-bottom: 1rem;
+        }
+    }
+</style>
+{% endblock %}
 {% block script %}
 <script src="/assets/service_planner/js/my_tasks.js"></script>
 {% endblock %}

@@ -9,16 +9,62 @@
   "autoname": "naming_series:",
   "naming_series": "SP-.YYYY.-",
   "field_order": [
+    "basic_info_section",
     "naming_series",
     "project_name",
     "organization",
-    "start_date",
-    "schedule_type",
-    "interval_days",
-    "default_role",
     "project_owner",
     "status",
+    "column_break_1",
+    "start_date",
+    "end_date",
+    "schedule_section",
+    "schedule_type",
+    "schedule_settings_section",
+    "weekly_days",
+    "interval_days",
+    "time_settings_section",
+    "task_time",
+    "duration_hours",
+    "column_break_2",
+    "default_role",
+    "task_template",
+    "tasks_section",
+    "tasks_section_break",
     "service_tasks"
+  ],
+  "sections": [
+    {
+      "label": "Basic Information",
+      "fieldname": "basic_info_section",
+      "fieldtype": "Section Break",
+      "collapsible": 0
+    },
+    {
+      "label": "Schedule Configuration",
+      "fieldname": "schedule_section",
+      "fieldtype": "Section Break",
+      "collapsible": 1
+    },
+    {
+      "label": "Schedule Settings",
+      "fieldname": "schedule_settings_section",
+      "fieldtype": "Section Break",
+      "collapsible": 1,
+      "depends_on": "eval:doc.schedule_type"
+    },
+    {
+      "label": "Time Settings",
+      "fieldname": "time_settings_section",
+      "fieldtype": "Section Break",
+      "collapsible": 1
+    },
+    {
+      "label": "Tasks",
+      "fieldname": "tasks_section",
+      "fieldtype": "Section Break",
+      "collapsible": 0
+    }
   ],
   "fields": [
     {
@@ -46,6 +92,10 @@
       "description": "Select the organization this project belongs to"
     },
     {
+      "fieldname": "column_break_1",
+      "fieldtype": "Column Break"
+    },
+    {
       "fieldname": "start_date",
       "label": "Start Date",
       "fieldtype": "Date",
@@ -54,30 +104,69 @@
       "description": "Starting date of the service project"
     },
     {
+      "fieldname": "end_date",
+      "label": "End Date",
+      "fieldtype": "Date",
+      "description": "Optional end date for the project"
+    },
+    {
       "fieldname": "schedule_type",
       "label": "Schedule Type",
       "fieldtype": "Select",
-      "options": "Daily\nWeekly\nEvery X Days",
+      "options": "Daily\nWeekly\nEvery X Days\nCustom",
       "reqd": 1,
       "default": "Daily",
       "description": "Select how tasks should be scheduled"
     },
     {
+      "fieldname": "weekly_days",
+      "label": "Weekly Days",
+      "fieldtype": "Table",
+      "options": "Week Day",
+      "depends_on": "eval:doc.schedule_type === 'Weekly'",
+      "mandatory_depends_on": "eval:doc.schedule_type === 'Weekly'",
+      "description": "Select days for weekly schedule"
+    },
+    {
       "fieldname": "interval_days",
       "label": "Interval Days",
       "fieldtype": "Int",
-      "depends_on": "eval:doc.schedule_type == 'Every X Days'",
-      "reqd": 1,
+      "depends_on": "eval:doc.schedule_type === 'Every X Days'",
+      "mandatory_depends_on": "eval:doc.schedule_type === 'Every X Days'",
       "default": 1,
-      "description": "Number of days between each task when using 'Every X Days'"
+      "description": "Days between tasks"
+    },
+    {
+      "fieldname": "task_time",
+      "label": "Task Time",
+      "fieldtype": "Time",
+      "default": "09:00:00",
+      "description": "Default time for tasks"
+    },
+    {
+      "fieldname": "duration_hours",
+      "label": "Duration (Hours)",
+      "fieldtype": "Float",
+      "default": 1.0,
+      "description": "Expected duration of each task"
+    },
+    {
+      "fieldname": "column_break_2",
+      "fieldtype": "Column Break"
     },
     {
       "fieldname": "default_role",
       "label": "Default Role",
-      "fieldtype": "Select",
-      "options": "Engineer\nAnalyst\nAccount Manager",
-      "default": "Engineer",
-      "description": "Default role for auto-generated tasks"
+      "fieldtype": "Link",
+      "options": "Role",
+      "reqd": 1,
+      "description": "Default role for tasks"
+    },
+    {
+      "fieldname": "task_template",
+      "label": "Task Template",
+      "fieldtype": "Small Text",
+      "description": "Template for task titles. Use {date} for dynamic date"
     },
     {
       "fieldname": "project_owner",
@@ -85,24 +174,29 @@
       "fieldtype": "Link",
       "options": "User",
       "reqd": 1,
-      "description": "User responsible for this project",
-      "depends_on": "eval:frappe.user.has_role('System Manager')"
+      "description": "User responsible for this project"
     },
     {
       "fieldname": "status",
       "label": "Status",
       "fieldtype": "Select",
-      "options": "Draft\nActive\nCompleted\nCancelled",
+      "options": "Draft\nActive\nOn Hold\nCompleted\nCancelled",
       "default": "Draft",
       "reqd": 1,
       "description": "Current status of the project"
+    },
+    {
+      "fieldname": "tasks_section_break",
+      "label": "Tasks",
+      "fieldtype": "Section Break",
+      "collapsible": 0
     },
     {
       "fieldname": "service_tasks",
       "label": "Service Tasks",
       "fieldtype": "Table",
       "options": "Service Task",
-      "description": "List of service tasks related to this project"
+      "description": "List of service tasks"
     }
   ],
   "permissions": [
@@ -113,7 +207,8 @@
       "create": 1,
       "delete": 1,
       "submit": 1,
-      "cancel": 1
+      "cancel": 1,
+      "amend": 1
     },
     {
       "role": "Projects Manager",
@@ -122,16 +217,19 @@
       "create": 1,
       "delete": 0,
       "submit": 1,
-      "cancel": 0
+      "cancel": 0,
+      "amend": 0
     },
     {
       "role": "Projects User",
       "read": 1,
       "write": 1,
-      "create": 1,
+      "create": 0,
       "delete": 0,
       "submit": 0,
-      "cancel": 0
+      "cancel": 0,
+      "amend": 0,
+      "if_owner": 1
     }
   ]
 }

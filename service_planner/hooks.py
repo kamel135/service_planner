@@ -15,6 +15,7 @@ app_license = "mit"
 
 
 
+
 #after_migrate = [
 #    "service_planner.notification.setup_notifications.run_notification_setup"
 #]
