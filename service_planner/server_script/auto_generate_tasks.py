@@ -297,6 +297,7 @@ def generate_service_tasks(doc):
             naive_dt = datetime.combine(task_date, task_time)
             
             # 5b. Make this datetime "aware" by localizing it to the creator's timezone.
+            # pytz will automatically handle DST if applicable!
             creator_aware_dt = creator_tz.localize(naive_dt)
 
             # 5c. Convert this local reference time to UTC for storage.
@@ -311,8 +312,9 @@ def generate_service_tasks(doc):
 
             # 5f. Prepare the dictionary with all data for the new task.
             task_data = {
-                'task_title': generate_task_title(doc, task_date),  # Use task_date instead of naive_dt
-                'due_date': due_date_for_db,
+                'task_title': generate_task_title(doc, task_date),
+                'due_date': due_date_for_db,  # UTC time
+                'due_date_utc': due_date_for_db,  # Same value for consistency
                 'local_due_date': local_due_date_for_db,
                 'assigned_role': doc.default_role,
                 'status': 'Pending',
@@ -320,7 +322,9 @@ def generate_service_tasks(doc):
                 'notes': generate_task_notes(doc),
                 'duration_hours': doc.duration_hours or 1.0,
                 'user_timezone': creator_tz_str,
-                'auto_generated': 1  # Mark as auto-generated
+                'auto_generated': 1,  # Mark as auto-generated
+                # Important: Add flag to indicate due_date is already UTC
+                'flags': {'due_date_is_utc': True}
             }
             
             # 5g. Append the new task to the document's child table.
@@ -347,6 +351,7 @@ def generate_service_tasks(doc):
     except Exception:
         frappe.log_error(frappe.get_traceback(), "Task Generation Error")
         frappe.throw(_("Error during task generation. Please check system logs for details."))
+
 
 def generate_task_notes(doc):
     """Generate standardized notes for a task."""
